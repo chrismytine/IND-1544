@@ -1,27 +1,47 @@
-token = 'MTIzNjU3OTM4OTYzMDU3ODY4OA.Gvgxnj.ZTteVIcrkjUM7B-QF45zCzQz84-KuLf8IHpTIc'
+token = 'MTIuuuuuuuuuuuzNjU3OTM4OuiukhkkhTYzMDU3ODY4OA.GbTXPM.HAecOeBW2mw1jB4DfRKdk7XuixiWkVOehcHuj8'
 
 import discord
-
-# Variabel intents menyimpan hak istimewa bot
+from discord.ext import commands
+import time
+import random
 intents = discord.Intents.default()
-# Mengaktifkan hak istimewa message-reading
 intents.message_content = True
-# Membuat bot di variabel klien dan mentransfernya hak istimewa
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix='$', intents=intents)
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'Kita telah masuk sebagai {client.user}')
+    print(f'We have logged in as {bot.user}')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content.startswith('$halo'):
-        await message.channel.send(f"Yahoo, selamat datang!, {client.user}. Ada yang bisa aku bantuuu?")
-    elif message.content.startswith('$bye'):
-        await message.channel.send("Dadang!, sampai jumpa kembali, wahai teman online ku.")
-    else:
-        await message.channel.send(message.content)
+@bot.command()
+async def greeting(ctx):
+    await ctx.send(f"In a cafe full of aroma, i arrive as the diploma. Yahoo, the name's Sneoma!")
 
-client.run(token)
+@bot.command(description='For when you wanna settle the score some other way')
+async def choose(ctx, *choices: str):
+    """Chooses between multiple choices."""
+    await ctx.send(random.choice(choices))
+
+@bot.command()
+async def add(ctx, left: int, right: int):
+    """Adds two numbers together."""
+    await ctx.send(left + right)
+
+@bot.command()
+async def end(ctx):
+    await ctx.send(f"I'm {bot.user}, ending our session. \n boop...boop...")
+
+@bot.group()
+async def cool(ctx):
+    """Says if a user is cool.
+
+    In reality this just checks if a subcommand is being invoked.
+    """
+    if ctx.invoked_subcommand is None:
+        await ctx.send(f'No, {ctx.subcommand_passed} is not cool')
+        
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
+
+
+bot.run(token)
